@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -21,7 +22,7 @@
             --light-green: #6ee7b7;
             --dark-green: #047857;
             --accent-green: #84cc16;
-            
+
             /* Dark theme colors */
             --bg-dark: #0f172a;
             --bg-darker: #020617;
@@ -30,16 +31,17 @@
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            
+
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
-            
+
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
             --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
             overflow-x: hidden;
         }
@@ -324,8 +326,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .map-instructions {
@@ -465,9 +472,9 @@
         .weather-card {
             grid-column: span 3;
             background: linear-gradient(135deg,
-                rgba(16, 185, 129, 0.2) 0%,
-                rgba(52, 211, 153, 0.15) 50%,
-                rgba(110, 231, 183, 0.1) 100%);
+                    rgba(16, 185, 129, 0.2) 0%,
+                    rgba(52, 211, 153, 0.15) 50%,
+                    rgba(110, 231, 183, 0.1) 100%);
             border-color: rgba(16, 185, 129, 0.3);
             text-align: center;
         }
@@ -753,9 +760,9 @@
         .season-card {
             grid-column: span 3;
             background: linear-gradient(135deg,
-                rgba(132, 204, 22, 0.2) 0%,
-                rgba(16, 185, 129, 0.15) 50%,
-                rgba(52, 211, 153, 0.1) 100%);
+                    rgba(132, 204, 22, 0.2) 0%,
+                    rgba(16, 185, 129, 0.15) 50%,
+                    rgba(52, 211, 153, 0.1) 100%);
             border-color: rgba(132, 204, 22, 0.3);
             text-align: center;
         }
@@ -807,6 +814,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -818,6 +826,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -829,23 +838,23 @@
             .dashboard-grid {
                 grid-template-columns: repeat(8, 1fr);
             }
-            
+
             .weather-card {
                 grid-column: span 4;
             }
-            
+
             .upload-card {
                 grid-column: span 4;
             }
-            
+
             .location-card {
                 grid-column: span 4;
             }
-            
+
             .recommendations-card {
                 grid-column: span 8;
             }
-            
+
             .season-card {
                 grid-column: span 4;
             }
@@ -856,7 +865,7 @@
                 height: auto;
                 min-height: 100vh;
             }
-            
+
             .dashboard-view {
                 position: relative;
                 transform: none;
@@ -864,17 +873,17 @@
                 height: auto;
                 min-height: 100vh;
             }
-            
+
             .map-view {
                 position: relative;
                 height: 100vh;
             }
-            
+
             .dashboard-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
             }
-            
+
             .weather-card,
             .upload-card,
             .location-card,
@@ -882,32 +891,32 @@
             .season-card {
                 grid-column: span 1;
             }
-            
+
             .map-header h1,
             .dashboard-header h1 {
                 font-size: 2rem;
             }
-            
+
             .temperature {
                 font-size: 2rem;
             }
-            
+
             .season-name {
                 font-size: 2rem;
             }
-            
+
             .season-icon {
                 font-size: 3rem;
             }
-            
+
             .weather-details {
                 grid-template-columns: 1fr;
             }
-            
+
             .upload-area {
                 height: 250px;
             }
-            
+
             .recommendations-grid {
                 grid-template-columns: 1fr;
             }
@@ -926,23 +935,24 @@
             .dashboard-container {
                 padding: 0.5rem;
             }
-            
+
             .card {
                 padding: 1rem;
             }
-            
+
             .notifications {
                 left: 0.5rem;
                 right: 0.5rem;
                 top: 0.5rem;
             }
-            
+
             .notification {
                 min-width: auto;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Error Popup -->
@@ -950,7 +960,8 @@
             <div class="error-popup-content">
                 <div class="error-popup-icon">⚠️</div>
                 <h2 class="error-popup-title" id="errorTitle">Analysis Failed</h2>
-                <p class="error-popup-message" id="errorMessage">Could not analyze this location. Please try another area.</p>
+                <p class="error-popup-message" id="errorMessage">Could not analyze this location. Please try another
+                    area.</p>
                 <div class="error-popup-buttons">
                     <button class="error-popup-button primary" onclick="closeErrorPopup()">Try Again</button>
                     <button class="error-popup-button secondary" onclick="closeErrorPopup()">Close</button>
@@ -967,15 +978,15 @@
                 <h1>🌱 Green Dashboard</h1>
                 <p>Click anywhere on the map to analyze plant conditions</p>
             </div>
-            
+
             <div id="map"></div>
-            
+
             <div class="map-loading" id="mapLoading">
                 <div class="spinner"></div>
                 <p style="color: var(--text-primary); font-size: 1.125rem;">Loading Map...</p>
                 <p style="color: var(--text-secondary); font-size: 0.875rem;">Preparing your plant analysis tool</p>
             </div>
-            
+
             <div class="map-instructions hidden" id="mapInstructions">
                 <div style="color: var(--primary-green); font-size: 1.5rem; margin-right: 0.5rem;">📍</div>
                 <div>
@@ -1025,8 +1036,8 @@
                     <!-- Upload Image Card -->
                     <div class="card upload-card">
                         <div class="upload-area">
-                            <img src="https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=800&h=600&fit=crop&crop=center" 
-                                 alt="Satellite view" class="satellite-image" id="satelliteImage">
+                            <img src="https://images.unsplash.com/photo-1446329813274-7c9036bd9a1f?w=800&h=600&fit=crop&crop=center"
+                                alt="Satellite view" class="satellite-image" id="satelliteImage">
                         </div>
                     </div>
 
@@ -1137,14 +1148,14 @@
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.id = `notification-${id}`;
-            
+
             const iconMap = {
                 loading: '<div class="spinner" style="width: 1.25rem; height: 1.25rem; border-width: 2px;"></div>',
                 success: '<div style="color: #10b981; font-size: 1.25rem;">✓</div>',
                 error: '<div style="color: #ef4444; font-size: 1.25rem;">⚠</div>',
                 info: '<div style="color: #3b82f6; font-size: 1.25rem;">📍</div>'
             };
-            
+
             notification.innerHTML = `
                 <div class="notification-icon">${iconMap[type]}</div>
                 <div class="notification-content">
@@ -1153,21 +1164,21 @@
                 </div>
                 ${type !== 'loading' ? '<button class="notification-close" onclick="removeNotification(\'' + id + '\')">&times;</button>' : ''}
             `;
-            
+
             document.getElementById('notifications').appendChild(notification);
-            
+
             // Trigger animation
             setTimeout(() => {
                 notification.classList.add('show');
             }, 100);
-            
+
             // Auto remove non-loading notifications
             if (type !== 'loading') {
                 setTimeout(() => {
                     removeNotification(id);
                 }, 5000);
             }
-            
+
             return id;
         }
 
@@ -1197,7 +1208,7 @@
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 28.6139, lng: 77.2090 }, // New Delhi
                 zoom: 10,
-                mapTypeId: 'satellite', // Set to satellite view
+                mapTypeId: 'satellite', // Satellite view
                 styles: [
                     {
                         featureType: "all",
@@ -1207,12 +1218,12 @@
                     {
                         featureType: "all",
                         elementType: "labels.text.fill",
-                        stylers: [{ color: "#64748b" }]
+                        stylers: [{ color: "#ffffff" }]  // make labels more visible
                     },
                     {
                         featureType: "all",
                         elementType: "labels.text.stroke",
-                        stylers: [{ color: "#0f172a" }]
+                        stylers: [{ color: "#000000" }]
                     },
                     {
                         featureType: "water",
@@ -1243,7 +1254,7 @@
             });
 
             // Add click listener
-            map.addListener("click", function(event) {
+            map.addListener("click", function (event) {
                 if (event.latLng) {
                     handleMapClick(event.latLng);
                 }
@@ -1252,140 +1263,129 @@
             // Hide loading and show instructions
             document.getElementById('mapLoading').classList.add('hidden');
             document.getElementById('mapInstructions').classList.remove('hidden');
-            
+
             addNotification('info', 'Map Ready', 'Click anywhere on the map to analyze that location');
         }
 
         // Handle map click
-        async function handleMapClick(latLng, address="") {
-            if (isLoading) return;
+async function handleMapClick(latLng) {
+    if (isLoading) return;
 
-            const lat = latLng.lat();
-            const lng = latLng.lng();
+    const lat = latLng.lat();
+    const lng = latLng.lng();
 
-            // Remove existing marker
-            if (marker) {
-                marker.setMap(null);
-            }
+    if (marker) marker.setMap(null); // Remove existing marker
 
-            // Add new marker with animation
-            marker = new google.maps.Marker({
-                position: { lat, lng },
-                map: map,
-                animation: google.maps.Animation.DROP,
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 10,
-                    fillColor: "#10b981",
-                    fillOpacity: 1,
-                    strokeColor: "#ffffff",
-                    strokeWeight: 2
+    marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        animation: google.maps.Animation.DROP,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 10,
+            fillColor: "#10b981",
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2
+        }
+    });
+
+    const loadingId = addNotification('loading', 'Analyzing Location', 'Getting weather data and plant recommendations...');
+    isLoading = true;
+
+    try {
+        const geocoder = new google.maps.Geocoder();
+        const geocodeResponse = await geocoder.geocode({ location: { lat, lng } });
+
+        let city = "Unknown City";
+        let country = "Unknown Country";
+
+        if (geocodeResponse.results && geocodeResponse.results.length > 0) {
+
+            for (const component of geocodeResponse.results[0].address_components) {
+                if (component.types.includes("locality")) {
+                    city = component.long_name;
                 }
-            });
-
-            // Show loading notification
-            const loadingId = addNotification('loading', 'Analyzing Location', 'Getting weather data and plant recommendations...');
-            isLoading = true;
-
-            try {
-                // Send request to your API (following your pattern)
-                const formData = new FormData();
-                formData.append("longitude", lng);
-                formData.append("latitude", lat);
-                formData.append("address", address);
-
-                console.log("📍 Selected Location:", lat, lng);
-
-                const response = await fetch("http://localhost:8000/analyze-location/", {
-                    method: "POST",
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (component.types.includes("country")) {
+                    country = component.long_name;
                 }
-
-                const result = await response.json();
-                console.log("Full API Response:", result);
-
-                // Validate response structure - check for new nested structure
-                if (!result || result.status !== "success" || !result.final_report || !result.final_report.response) {
-                    throw new Error("Invalid response format from server");
-                }
-
-                const responseData = result.final_report.response;
-                
-                // Validate nested response structure
-                if (!responseData.weather_data || !responseData.land_coverage || !responseData.season || !responseData.location || !responseData.recommendations) {
-                    throw new Error("Missing required data in response");
-                }
-
-                // Store the static map image path
-                staticMapImagePath = result.file_path || null;
-
-                // Get address using reverse geocoding
-                const geocoder = new google.maps.Geocoder();
-                const geocodeResponse = await geocoder.geocode({ location: { lat, lng } });
-
-                let address = "Unknown Location";
-                let city = responseData.location.city || "Unknown City";
-                let country = responseData.location.country || "Unknown Country";
-
-                if (geocodeResponse.results[0]) {
-                    address = geocodeResponse.results[0].formatted_address;
-                }
-
-                selectedLocation = { lat, lng, address, city, country };
-                dashboardData = responseData;
-
-                // Remove loading notification
-                removeNotification(loadingId);
-
-                // Show success notification
-                addNotification('success', 'Analysis Complete', `${result.message || 'Found data for ' + city + ', ' + country}. Opening dashboard...`);
-
-                // Transition to dashboard after delay
-                setTimeout(() => {
-                    showDashboard();
-                }, 1500);
-
-            } catch (error) {
-                console.error("Error analyzing location:", error);
-                
-                // Remove loading notification
-                removeNotification(loadingId);
-                
-                // Show error popup instead of just notification
-                let errorTitle = "Analysis Failed";
-                let errorMessage = "Could not analyze this location. Please try another area.";
-
-                if (error.message.includes("HTTP error")) {
-                    errorTitle = "Server Error";
-                    errorMessage = "The analysis server is not responding. Please check if the backend service is running on http://localhost:8000/";
-                } else if (error.message.includes("Invalid response") || error.message.includes("Missing required data")) {
-                    errorTitle = "Invalid Response";
-                    errorMessage = "The server returned an invalid response format. Please check the API implementation.";
-                } else if (error.message.includes("Failed to fetch")) {
-                    errorTitle = "Connection Error";
-                    errorMessage = "Cannot connect to the analysis server. Please ensure the backend is running and accessible.";
-                }
-
-                showErrorPopup(errorTitle, errorMessage);
-
-                // Also show notification
-                addNotification('error', errorTitle, errorMessage);
-
-            } finally {
-                isLoading = false;
             }
         }
+
+        selectedLocation = { lat, lng, city, country };
+
+        const formData = new FormData();
+        formData.append("longitude", lng);
+        formData.append("latitude", lat);
+        formData.append("city", city);
+        formData.append("country", country);
+
+        console.log("📍 Selected Location:", { lat, lng, city, country });
+
+        const response = await fetch("http://localhost:8000/analyze-location/", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Full API Response:", result);
+
+        if (!result || result.status !== "success" || !result.final_report || !result.final_report.response) {
+            throw new Error("Invalid response format from server");
+        }
+
+        const responseData = result.final_report.response;
+
+        if (!responseData.weather_data || !responseData.land_coverage || !responseData.season || !responseData.location || !responseData.recommendations) {
+            throw new Error("Missing required data in response");
+        }
+
+        staticMapImagePath = result.file_path || null;
+        dashboardData = responseData;
+
+        removeNotification(loadingId);
+        addNotification('success', 'Analysis Complete', `${result.message || 'Found data for ' + city + ', ' + country}. Opening dashboard...`);
+
+        setTimeout(() => {
+            showDashboard();
+        }, 1500);
+
+    } catch (error) {
+        console.error("Error analyzing location:", error);
+        removeNotification(loadingId);
+
+        let errorTitle = "Analysis Failed";
+        let errorMessage = "Could not analyze this location. Please try another area.";
+
+        if (error.message.includes("HTTP error")) {
+            errorTitle = "Server Error";
+            errorMessage = "The analysis server is not responding. Please check if the backend service is running on http://localhost:8000/";
+        } else if (error.message.includes("Invalid response") || error.message.includes("Missing required data")) {
+            errorTitle = "Invalid Response";
+            errorMessage = "The server returned an invalid response format. Please check the API implementation.";
+        } else if (error.message.includes("Failed to fetch")) {
+            errorTitle = "Connection Error";
+            errorMessage = "Cannot connect to the analysis server. Please ensure the backend is running and accessible.";
+        }
+
+        showErrorPopup(errorTitle, errorMessage);
+        addNotification('error', errorTitle, errorMessage);
+    } finally {
+        isLoading = false;
+    }
+}
+
 
         // Show dashboard
         function showDashboard() {
             currentView = 'dashboard';
             document.getElementById('mapView').classList.add('hidden');
             document.getElementById('dashboardView').classList.add('show');
-            
+
             populateDashboard();
         }
 
@@ -1394,7 +1394,7 @@
             currentView = 'map';
             document.getElementById('mapView').classList.remove('hidden');
             document.getElementById('dashboardView').classList.remove('show');
-            
+
             selectedLocation = null;
             dashboardData = null;
             staticMapImagePath = null;
@@ -1405,27 +1405,27 @@
             if (!dashboardData || !selectedLocation) return;
 
             // Update location title
-            document.getElementById('locationTitle').textContent = 
+            document.getElementById('locationTitle').textContent =
                 `Analysis for ${selectedLocation.city}, ${selectedLocation.country}`;
 
             // Update weather data
-            document.getElementById('temperature').textContent = 
+            document.getElementById('temperature').textContent =
                 `${dashboardData.weather_data.temperature.toFixed(1)}°C`;
-            document.getElementById('weatherDescription').textContent = 
+            document.getElementById('weatherDescription').textContent =
                 dashboardData.weather_data.weather_description;
-            document.getElementById('humidity').textContent = 
+            document.getElementById('humidity').textContent =
                 `${dashboardData.weather_data.humidity.toFixed(0)}%`;
-            document.getElementById('windSpeed').textContent = 
+            document.getElementById('windSpeed').textContent =
                 `${dashboardData.weather_data.wind_speed.toFixed(1)} m/s`;
-            document.getElementById('feelsLike').textContent = 
+            document.getElementById('feelsLike').textContent =
                 `${dashboardData.weather_data.feels_like.toFixed(1)}°C`;
-            document.getElementById('uvIndex').textContent = 
+            document.getElementById('uvIndex').textContent =
                 dashboardData.weather_data.uv_index.toFixed(1);
 
             // Update location data
             document.getElementById('cityName').textContent = dashboardData.location.city;
             document.getElementById('countryName').textContent = dashboardData.location.country;
-            document.getElementById('coordinates').textContent = 
+            document.getElementById('coordinates').textContent =
                 `${selectedLocation.lat.toFixed(4)}, ${selectedLocation.lng.toFixed(4)}`;
 
             // Update land coverage with new field names
@@ -1457,10 +1457,10 @@
             // Update season data
             const monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
-            
+
             document.getElementById('seasonName').textContent = dashboardData.season.season;
             document.getElementById('seasonMonth').textContent = monthNames[dashboardData.season.month - 1];
-            document.getElementById('growingStatus').textContent = 
+            document.getElementById('growingStatus').textContent =
                 `Growing Season: ${dashboardData.season.is_growing_season ? 'Yes' : 'No'}`;
             document.getElementById('plantingAdvice').textContent = dashboardData.season.planting_season;
 
@@ -1475,15 +1475,15 @@
             // Populate recommendations from backend response
             const grid = document.getElementById('recommendationsGrid');
             grid.innerHTML = '';
-            
+
             if (dashboardData.recommendations && dashboardData.recommendations.length > 0) {
                 dashboardData.recommendations.forEach(plant => {
                     const item = document.createElement('div');
                     item.className = 'recommendation-item';
-                    
+
                     // Clean up the plant name (remove markdown formatting)
                     const cleanName = plant.name.replace(/\*([^*]+)\*/g, '$1').trim();
-                    
+
                     item.innerHTML = `
                         <div class="plant-name">${cleanName}</div>
                         <div class="plant-reason">${plant.reason}</div>
@@ -1517,7 +1517,7 @@
             script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`;
             script.async = true;
             script.defer = true;
-            script.onerror = function() {
+            script.onerror = function () {
                 document.getElementById('mapLoading').innerHTML = `
                     <div style="text-align: center; color: var(--text-primary);">
                         <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
@@ -1550,4 +1550,5 @@
         window.initMap = initMap;
     </script>
 </body>
+
 </html>
