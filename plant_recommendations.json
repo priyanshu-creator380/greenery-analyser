@@ -1,0 +1,59 @@
+{
+  "recommendations": [
+    {
+      "name": " *Hibiscus rosa-sinensis* (China Rose)",
+      "reason": " Hibiscus are incredibly heat and humidity tolerant, thriving in the summer conditions of Lucknow. They are relatively drought-tolerant once established, but benefit from regular watering, especially during the hotter months.  Their vibrant flowers add color to the landscape.",
+      "care": " Plant in well-drained soil with partial shade. Water deeply and regularly, especially during hot, dry periods. Fertilize monthly during the growing season. Prune regularly to maintain shape and encourage flowering."
+    },
+    {
+      "name": " *Nerium oleander* (Oleander)",
+      "reason": " Oleander is exceptionally drought-tolerant and thrives in hot, sunny conditions. It tolerates poor soil and is a hardy option for a summer garden in Lucknow.  However, extreme caution is advised: all parts of the oleander plant are highly toxic if ingested, so it should be planted away from children and pets.",
+      "care": " Plant in full sun to partial shade in well-drained soil. Water regularly, but allow the soil to dry slightly between waterings.  Prune after flowering to maintain shape."
+    },
+    {
+      "name": " *Bougainvillea spectabilis* (Bougainvillea)",
+      "reason": " Bougainvillea is a vigorous climber famed for its vibrant bracts (modified leaves) that appear as flowers. It is extremely heat and drought-tolerant and perfectly suited to Lucknow's summer climate. It can tolerate full sun.",
+      "care": "  Plant in well-drained soil in a sunny location.  Provide support for climbing. Water deeply but infrequently, allowing the soil to dry out between waterings. Prune regularly to maintain shape and encourage flowering."
+    },
+    {
+      "name": " *Mimusops elengi* (Spanish Cherry)",
+      "reason": " This is a native Indian tree that is highly adapted to the climate, tolerating both heat and drought conditions well. It provides shade, lovely fragrant flowers, and attractive fruits.  It is relatively low-maintenance.",
+      "care": " Plant in well-drained soil in full sun or partial shade. Water regularly during establishment, then less frequently once established. Minimal pruning is needed."
+    },
+    {
+      "name": " *Catharanthus roseus* (Madagascar Periwinkle)",
+      "reason": "  Periwinkle is a low-maintenance, heat-loving groundcover that thrives in full sun and tolerates poor soil.  It\u2019s known for its profuse blooms throughout the summer and requires relatively little watering once established.",
+      "care": " Plant in well-drained soil in full sun or partial shade. Water regularly, but allow the soil to dry slightly between waterings. Deadhead spent flowers to encourage more blooms."
+    }
+  ],
+  "weather_data": {
+    "temperature": 31.1,
+    "humidity": 79,
+    "pressure": 999.0,
+    "weather_description": "Mist",
+    "wind_speed": 4.694444444444444,
+    "precipitation": 0.0,
+    "feels_like": 34.0,
+    "uv_index": 0.0,
+    "visibility": 5.0,
+    "local_time": "2025-07-02 22:18",
+    "timezone": "Asia/Kolkata"
+  },
+  "land_coverage": {
+    "plant_coverage": 25.0,
+    "building_coverage": 35.0,
+    "road_coverage": 15.0,
+    "empty_land": 25.0
+  },
+  "season": {
+    "season": "Summer",
+    "month": 7,
+    "day_of_year": 183,
+    "is_growing_season": true,
+    "planting_season": "Good for heat-tolerant plants, ensure adequate watering"
+  },
+  "location": {
+    "city": "Lucknow",
+    "country": "India"
+  }
+}
