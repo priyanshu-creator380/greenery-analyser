@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcss()],
     server: {
-      port: parseInt(env.VITE_PORT) || 5173, // fallback to default if undefined
+      port: parseInt(env.VITE_PORT) || 8080, // fallback to default if undefined
     },
   };
 });
