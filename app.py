@@ -13,7 +13,7 @@ from step1 import generate_coverage_details
 from step2 import generate_final_report
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/static", StaticFiles(directory="public"), name="static")
 app.mount("/files", StaticFiles(directory="files"), name="files")
 FILES_DIR = os.path.dirname(__file__)
 app.add_middleware(
@@ -47,7 +47,7 @@ async def get_image(image_name: str):
 #         "message": "Welcome to the Image Greenery Report Generator API"
 #     }
 async def serve_index():
-    return FileResponse(os.path.join("frontend", "replit.html"))
+    return FileResponse(os.path.join("publix", "index.html"))
 
 @app.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...)):
