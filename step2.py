@@ -228,7 +228,7 @@ class PlantRecommendationSystem:
 def generate_final_report(
     coverage_details: Dict,
     city: str,
-    country: str = "India",
+    country: str ,
     latitude: Optional[float] = None,
     longitude: Optional[float] = None,
 ) -> Dict:

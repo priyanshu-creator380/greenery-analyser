@@ -471,6 +471,10 @@
         /* Weather Card */
         .weather-card {
             grid-column: span 3;
+            display: flex
+;
+            flex-direction: column;
+            justify-content: center;
             background: linear-gradient(135deg,
                     rgba(16, 185, 129, 0.2) 0%,
                     rgba(52, 211, 153, 0.15) 50%,
@@ -765,6 +769,10 @@
                     rgba(52, 211, 153, 0.1) 100%);
             border-color: rgba(132, 204, 22, 0.3);
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: fit-content;
         }
 
         .season-icon {
@@ -1208,7 +1216,7 @@
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 28.6139, lng: 77.2090 }, // New Delhi
                 zoom: 10,
-                mapTypeId: 'satellite', // Satellite view
+                mapTypeId: 'hybrid', // Satellite view
                 styles: [
                     {
                         featureType: "all",

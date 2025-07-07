@@ -67,6 +67,8 @@ async def analyze_location(request: Request, city: str = Form(...),country: str 
     map_result = download_static_map(latitude, longitude, zoom=zoom)
 
 
+    print(city, country, latitude, longitude)
+
     if map_result["status"] == "error":
         return {
             "status": "error",
