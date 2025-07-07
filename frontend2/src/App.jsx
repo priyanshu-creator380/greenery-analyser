@@ -187,7 +187,7 @@ const App = () => {
       formData.append("city", city);
       formData.append("country", country);
 
-      const response = await fetch("http://localhost:8000/analyze-location/", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND}/analyze-location/`, {
         method: "POST",
         body: formData
       });
