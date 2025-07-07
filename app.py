@@ -97,6 +97,6 @@ async def analyze_location(request: Request, city: str = Form(...),country: str 
             "file_path": map_result["file_path"]
         }
     
-if __name__ == "__main__":
-    PORT = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=PORT, reload=True)
+# if __name__ == "__main__":
+#     PORT = int(os.getenv("PORT", 8000))
+#     uvicorn.run(app, host="0.0.0.0", port=PORT, reload=True)
