@@ -15,6 +15,30 @@ const App = () => {
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
 
+  // Function to handle view changes and map refresh
+  const handleViewChange = (newView) => {
+    setCurrentView(newView);
+    
+    // If switching back to map view, refresh the map
+    if (newView === 'map' && mapInstanceRef.current) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        // Trigger resize event to re-render the map
+        window.google.maps.event.trigger(mapInstanceRef.current, 'resize');
+        
+        // Optionally re-center the map
+        if (selectedLocation) {
+          mapInstanceRef.current.setCenter({ 
+            lat: selectedLocation.lat, 
+            lng: selectedLocation.lng 
+          });
+        } else {
+          mapInstanceRef.current.setCenter({ lat: 28.6139, lng: 77.2090 });
+        }
+      }, 100);
+    }
+  };
+
   // Notification system
   const addNotification = (type, title, message) => {
     const id = Date.now().toString();
@@ -103,10 +127,12 @@ const App = () => {
     const lat = latLng.lat();
     const lng = latLng.lng();
 
+    // Remove existing marker
     if (markerRef.current) {
       markerRef.current.setMap(null);
     }
 
+    // Add new marker
     markerRef.current = new window.google.maps.Marker({
       position: { lat, lng },
       map: mapInstanceRef.current,
@@ -120,6 +146,17 @@ const App = () => {
         strokeWeight: 2
       }
     });
+
+    // Smooth zoom and pan to the clicked location
+    const targetZoom = 15; // Zoom level for detailed view
+    
+    // Animate to the new position
+    mapInstanceRef.current.panTo({ lat, lng });
+    
+    // Smooth zoom transition
+    setTimeout(() => {
+      mapInstanceRef.current.setZoom(targetZoom);
+    }, 500); // Delay zoom slightly for smoother experience
 
     const loadingId = addNotification('loading', 'Analyzing Location', 'Getting weather data and plant recommendations...');
     setIsLoading(true);
@@ -227,6 +264,17 @@ const App = () => {
       }
     };
   }, []);
+
+  // Effect to handle map resize when view changes
+  useEffect(() => {
+    if (currentView === 'map' && mapInstanceRef.current && window.google) {
+      const timer = setTimeout(() => {
+        window.google.maps.event.trigger(mapInstanceRef.current, 'resize');
+      }, 200);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentView]);
 
   const NotificationIcon = ({ type }) => {
     switch (type) {
@@ -365,7 +413,7 @@ const App = () => {
             <header className="text-center mb-8">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <button
-                  onClick={() => setCurrentView('map')}
+                  onClick={() => handleViewChange('map')}
                   className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-sm font-medium transition-colors duration-200"
                 >
                   ← Back to Map
