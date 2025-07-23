@@ -71,7 +71,7 @@ def generate_coverage_details(image_path="files/static_map.png", latitude=None, 
 }
 Only return the JSON object. Do not include any explanation or extra text. All values should be in percentage format as floats (e.g., 23.5).
 """
-
+# this will download and analyze the image from the given path
     try:
         caption = caption_image(image_path, prompt=prompt)
         parsed_json = extract_json_from_caption(caption)
@@ -90,3 +90,4 @@ Only return the JSON object. Do not include any explanation or extra text. All v
 # Example usage:
 # result = generate_coverage_details()
 # print(result)
+# this is the code for all the coverage details extraction 

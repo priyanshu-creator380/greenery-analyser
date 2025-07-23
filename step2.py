@@ -247,6 +247,7 @@ Please provide your recommendations using the following format for each plant:
 Note:
 - Be context-aware — tailor each suggestion to the presence of water, percentage of built-up area, or wind exposure.
 - Do not recommend invasive or non-native species unless explicitly suitable and controlled.
+- Do not any thing other than the plant reason and care in the response and keep the proper format
 
             """
         )
@@ -383,3 +384,6 @@ def generate_final_report(
 # print(result)
 
 # location is from google maps and some areas dont come under any area 
+
+
+# this does not work on some location due to some areas dont come under city or country
