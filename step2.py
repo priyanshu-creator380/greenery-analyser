@@ -191,35 +191,63 @@ class PlantRecommendationSystem:
                 "vegetation_coverage", "building_coverage", "road_coverage", 
                 "empty_land", "water_body", "city", "country", "season", "planting_season"
             ],
+            # this is the template for the prompt
             template="""
-                You are an expert botanist and landscape designer. Based on the following environmental conditions and the current season, recommend 3-5 suitable plants that can thrive in this location.
+                You are an expert botanist and landscape designer. Based on the following environmental conditions, land usage patterns, and seasonal planting guidelines, generate a concise analytical report that recommends **3–5 plant species** suitable for this specific location.
 
-                Location: {city}, {country}
+Your recommendations should take into account:
+- Climatic tolerance (temperature, UV index, humidity, wind, rainfall)
+- Current weather condition and visibility
+- Land coverage distribution (urban, semi-urban, rural mix)
+- Seasonal compatibility (what thrives in the current season and planting window)
+- Availability of water bodies and vegetation for support ecosystems
+- Possibility of deploying different plants in different types of spaces (e.g., open fields, roadside greening, rooftop gardens, water-adjacent planting)
 
-                Weather Conditions:
-                - Temperature: {temperature}°C (Feels like: {feels_like}°C)
-                - Humidity: {humidity}%
-                - Weather: {weather_description}
-                - Wind Speed: {wind_speed} m/s
-                - Precipitation: {precipitation} mm
-                - UV Index: {uv_index}
-                - Visibility: {visibility} km
+Each recommendation must include:
+- **Scientific and common name**
+- A reasoned justification that connects environmental parameters to plant suitability
+- Basic but practical care tips tailored to these conditions
+- And in the **Care** section, include **in quotes** an estimate of the **number of plants that can be planted**, based on the available empty land percentage and general space requirement of that plant
 
-                Land Coverage:
-                - Vegetation Coverage: {vegetation_coverage}%
-                - Building Coverage: {building_coverage}%
-                - Road Coverage: {road_coverage}%
-                - Empty Land Available: {empty_land}%
-                - Water Bodies: {water_body}%
+---
 
-                Season: {season}
-                Planting Guidelines: {planting_season}
+**Location:** {city}, {country}
 
-                Please provide recommendations in the following format for each plant:
+**Weather Conditions:**
+- Temperature: {temperature}°C (Feels like: {feels_like}°C)
+- Humidity: {humidity}%
+- Weather: {weather_description}
+- Wind Speed: {wind_speed} m/s
+- Precipitation: {precipitation} mm
+- UV Index: {uv_index}
+- Visibility: {visibility} km
 
-                Plant: [Plant Name]
-                Reason: [Why this plant is suitable for these conditions]
-                Care: [Basic care instructions]
+**Land Coverage:**
+- Vegetation Coverage: {vegetation_coverage}%
+- Building Coverage: {building_coverage}%
+- Road Coverage: {road_coverage}%
+- Empty Land Available: {empty_land}%
+- Water Bodies: {water_body}%
+
+**Season:** {season}  
+**Planting Guidelines:** {planting_season}
+
+---
+
+Please provide your recommendations using the following format for each plant:
+
+---
+
+**Plant:** [Common Name] *(Scientific Name)*  
+**Reason:** [Explain why this plant is suitable for the given weather, land, and seasonal factors]  
+**Care:** [Include basic care tips: watering needs, sunlight preference, soil type, and maintenance level. At the end, include an estimate in quotes: e.g., "Approximately 50–60 plants can be planted per 1000 sq.m based on spacing requirements and current land availability."]
+
+---
+
+Note:
+- Be context-aware — tailor each suggestion to the presence of water, percentage of built-up area, or wind exposure.
+- Do not recommend invasive or non-native species unless explicitly suitable and controlled.
+
             """
         )
         self.parser = PlantRecommendationParser()
@@ -353,3 +381,5 @@ def generate_final_report(
 #     longitude=80.9462
 # )
 # print(result)
+
+# location is from google maps and some areas dont come under any area 
