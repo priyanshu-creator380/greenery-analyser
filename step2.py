@@ -202,6 +202,7 @@ Your recommendations should take into account:
 - Seasonal compatibility (what thrives in the current season and planting window)
 - Availability of water bodies and vegetation for support ecosystems
 - Possibility of deploying different plants in different types of spaces (e.g., open fields, roadside greening, rooftop gardens, water-adjacent planting)
+- keep in account what type of location it is like lucknow is a city so dont suggest to plant sugarcane or farm crops, in delhi you will suggest decorative plants and tree
 
 Each recommendation must include:
 - **Scientific and common name**
