@@ -37,7 +37,7 @@ def caption_image(image_path, prompt="Caption this image.", api_key=None):
 
         mime_type = get_mime_type(image_path)
 
-        model = genai.GenerativeModel("gemini-2.5-flash")
+        model = genai.GenerativeModel("gemini-2.5-pro")
         response = model.generate_content([
             {"mime_type": mime_type, "data": image_data},
             prompt

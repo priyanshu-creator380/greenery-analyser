@@ -203,7 +203,7 @@ class PlantRecommendationSystem:
     def __init__(self, weatherapi_key: str, gemini_api_key: str):
         self.weather_service = WeatherService(weatherapi_key)
         genai.configure(api_key=gemini_api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        self.model = genai.GenerativeModel('gemini-2.5-pro')
 
         self.prompt_template = PromptTemplate(
             input_variables=[
