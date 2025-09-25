@@ -205,7 +205,7 @@ Your recommendations should take into account:
 - keep in account what type of location it is like lucknow is a city so dont suggest to plant sugarcane or farm crops, in delhi you will suggest decorative plants and tree
 
 Each recommendation must include:
-- **Scientific and common name**
+- **Indian Name then in bracket english name like gulab (Rose)**
 - A reasoned justification that connects environmental parameters to plant suitability
 - Basic but practical care tips tailored to these conditions
 - And in the **Care** section, include **in quotes** an estimate of the **number of plants that can be planted**, based on the available empty land percentage and general space requirement of that plant
