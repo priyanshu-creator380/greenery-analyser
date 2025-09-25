@@ -1,20 +1,20 @@
 # Imports and setup
 import os
 import requests
-import json
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 from dataclasses import dataclass
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import BaseOutputParser
 import google.generativeai as genai
 from dotenv import load_dotenv
 from datetime import datetime
-import pytz
 
 # Load environment variables from .env file
 load_dotenv()
 
+# ------------------------------
 # Data structures
+# ------------------------------
 @dataclass
 class WeatherData:
     temperature: float
@@ -52,6 +52,9 @@ class LocationData:
     city: str
     country: str
 
+# ------------------------------
+# Plant Recommendation Parser
+# ------------------------------
 class PlantRecommendationParser(BaseOutputParser):
     def parse(self, text: str) -> Dict:
         try:
@@ -82,43 +85,58 @@ class PlantRecommendationParser(BaseOutputParser):
                 'error': str(e)
             }
 
+# ------------------------------
+# Weather Service (Google Weather API)
+# ------------------------------
 class WeatherService:
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.base_url = "http://api.weatherapi.com/v1/current.json"
+        self.base_url = "https://weather.googleapis.com/v1/currentConditions:lookup"
 
-    def get_weather_data(self, city: str) -> Optional[WeatherData]:
+    def get_weather_data(self, latitude: float, longitude: float) -> Optional[WeatherData]:
         try:
-            params = {'key': self.api_key, 'q': city, 'aqi': 'no'}
+            params = {
+                "key": self.api_key,
+                "location.latitude": latitude,
+                "location.longitude": longitude
+            }
             response = requests.get(self.base_url, params=params)
             response.raise_for_status()
-
             data = response.json()
-            current = data['current']
-            location = data['location']
+
+            current = data.get("weatherCondition", {})
+            temperature_info = data.get("temperature", {})
+            feels_like_info = data.get("feelsLikeTemperature", {})
+            wind_info = data.get("wind", {})
+            precipitation_info = data.get("precipitation", {})
+            visibility_info = data.get("visibility", {})
+            pressure_info = data.get("airPressure", {})
 
             return WeatherData(
-                temperature=current['temp_c'],
-                humidity=current['humidity'],
-                pressure=current['pressure_mb'],
-                weather_description=current['condition']['text'],
-                wind_speed=current['wind_kph'] / 3.6,
-                precipitation=current['precip_mm'],
-                feels_like=current['feelslike_c'],
-                uv_index=current['uv'],
-                visibility=current['vis_km'],
-                local_time=location['localtime'],
-                timezone=location['tz_id']
+                temperature=temperature_info.get("degrees", 0.0),
+                humidity=data.get("relativeHumidity", 0.0),
+                pressure=pressure_info.get("meanSeaLevelMillibars", 0.0),
+                weather_description=current.get("description", {}).get("text", ""),
+                wind_speed=wind_info.get("speed", {}).get("value", 0.0) / 3.6,  # km/h to m/s
+                precipitation=precipitation_info.get("qpf", {}).get("quantity", 0.0),
+                feels_like=feels_like_info.get("degrees", 0.0),
+                uv_index=data.get("uvIndex", 0.0),
+                visibility=visibility_info.get("distance", 0.0),
+                local_time=data.get("currentTime", ""),
+                timezone=data.get("timeZone", {}).get("id", "")
             )
         except Exception as e:
             print(f"Error fetching weather data: {e}")
             return None
 
+# ------------------------------
+# Season Service
+# ------------------------------
 class SeasonService:
     @staticmethod
     def determine_season(date_str: str, timezone_str: str, latitude: float = 0, city: str = "", country: str = "") -> SeasonData:
         try:
-            local_time = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
+            local_time = datetime.strptime(date_str[:16], '%Y-%m-%dT%H:%M')
             month = local_time.month
             day_of_year = local_time.timetuple().tm_yday
             is_southern = latitude < 0
@@ -178,6 +196,9 @@ class SeasonService:
         }
         return coordinates.get(city.lower(), (26.8467, 80.9462))
 
+# ------------------------------
+# Plant Recommendation System
+# ------------------------------
 class PlantRecommendationSystem:
     def __init__(self, weatherapi_key: str, gemini_api_key: str):
         self.weather_service = WeatherService(weatherapi_key)
@@ -191,7 +212,6 @@ class PlantRecommendationSystem:
                 "vegetation_coverage", "building_coverage", "road_coverage", 
                 "empty_land", "water_body", "city", "country", "season", "planting_season"
             ],
-            # this is the template for the prompt
             template="""
                 You are an expert botanist and landscape designer. Based on the following environmental conditions, land usage patterns, and seasonal planting guidelines, generate a concise analytical report that recommends **3–5 plant species** suitable for this specific location.
 
@@ -234,31 +254,28 @@ Each recommendation must include:
 **Planting Guidelines:** {planting_season}
 
 ---
-
 Please provide your recommendations using the following format for each plant:
-
----
 
 **Plant:** [Common Name] *(Scientific Name)*  
 **Reason:** [Explain why this plant is suitable for the given weather, land, and seasonal factors]  
 **Care:** [Include basic care tips: watering needs, sunlight preference, soil type, and maintenance level. At the end, include an estimate in quotes: e.g., "Approximately 50–60 plants can be planted per 1000 sq.m based on spacing requirements and current land availability."]
 
 ---
-
 Note:
 - Be context-aware — tailor each suggestion to the presence of water, percentage of built-up area, or wind exposure.
 - Do not recommend invasive or non-native species unless explicitly suitable and controlled.
 - Do not any thing other than the plant reason and care in the response and keep the proper format
-
             """
         )
         self.parser = PlantRecommendationParser()
 
-# ✅ Final function with lat/lng support
+# ------------------------------
+# Final function with lat/lng support
+# ------------------------------
 def generate_final_report(
     coverage_details: Dict,
     city: str,
-    country: str ,
+    country: str,
     latitude: Optional[float] = None,
     longitude: Optional[float] = None,
 ) -> Dict:
@@ -303,18 +320,18 @@ def generate_final_report(
                 "response": None,
             }
 
+        if latitude is None or longitude is None:
+            latitude, longitude = SeasonService.get_location_coordinates(city, country)
+
         plant_system = PlantRecommendationSystem(WEATHERAPI_KEY, GEMINI_API_KEY)
 
-        weather_data = plant_system.weather_service.get_weather_data(city)
+        weather_data = plant_system.weather_service.get_weather_data(latitude, longitude)
         if not weather_data:
             return {
                 "status": "error",
-                "message": "Failed to fetch weather data for the provided city.",
+                "message": "Failed to fetch weather data for the provided location.",
                 "response": None,
             }
-
-        if latitude is None:
-            latitude, _ = SeasonService.get_location_coordinates(city, country)
 
         season_data = SeasonService.determine_season(
             weather_data.local_time, weather_data.timezone, latitude, city, country
@@ -365,26 +382,3 @@ def generate_final_report(
             "message": f"Unexpected error: {str(e)}",
             "response": None,
         }
-
-# Example usage (uncomment to run):
-# example_coverage = {
-#     'vegetation_coverage': 7.0,
-#     'building_coverage': 72.0,
-#     'road_coverage': 12.0,
-#     'empty_land': 3.0,
-#     'water_body': 6.0
-# }
-
-# result = generate_final_report(
-#     coverage_details=example_coverage,
-#     city="Lucknow",
-#     country="India",
-#     latitude=26.8467,
-#     longitude=80.9462
-# )
-# print(result)
-
-# location is from google maps and some areas dont come under any area 
-
-
-# this does not work on some location due to some areas dont come under city or country
