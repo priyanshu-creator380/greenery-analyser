@@ -3,3 +3,4 @@ __pycache__
 .env
 
 frontend2/.env
+files/*

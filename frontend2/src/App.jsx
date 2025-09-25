@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import "./App.css"
+import "./App.css";
 
 const App = () => {
   const [currentView, setCurrentView] = useState('map');
@@ -10,28 +10,20 @@ const App = () => {
   const [notifications, setNotifications] = useState([]);
   const [errorPopup, setErrorPopup] = useState({ show: false, title: '', message: '' });
   const [staticMapImagePath, setStaticMapImagePath] = useState(null);
-  
+  const [searchQuery, setSearchQuery] = useState("");
+
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markerRef = useRef(null);
 
-  // Function to handle view changes and map refresh
+  // Handle view changes and map refresh
   const handleViewChange = (newView) => {
     setCurrentView(newView);
-    
-    // If switching back to map view, refresh the map
     if (newView === 'map' && mapInstanceRef.current) {
-      // Small delay to ensure DOM is updated
       setTimeout(() => {
-        // Trigger resize event to re-render the map
         window.google.maps.event.trigger(mapInstanceRef.current, 'resize');
-        
-        // Optionally re-center the map
         if (selectedLocation) {
-          mapInstanceRef.current.setCenter({ 
-            lat: selectedLocation.lat, 
-            lng: selectedLocation.lng 
-          });
+          mapInstanceRef.current.setCenter({ lat: selectedLocation.lat, lng: selectedLocation.lng });
         } else {
           mapInstanceRef.current.setCenter({ lat: 28.6139, lng: 77.2090 });
         }
@@ -44,27 +36,16 @@ const App = () => {
     const id = Date.now().toString();
     const notification = { id, type, title, message };
     setNotifications(prev => [...prev, notification]);
-    
     if (type !== 'loading') {
-      setTimeout(() => {
-        removeNotification(id);
-      }, 5000);
+      setTimeout(() => removeNotification(id), 5000);
     }
-    
     return id;
   };
 
-  const removeNotification = (id) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
-  };
+  const removeNotification = (id) => setNotifications(prev => prev.filter(n => n.id !== id));
 
-  const showErrorPopup = (title, message) => {
-    setErrorPopup({ show: true, title, message });
-  };
-
-  const closeErrorPopup = () => {
-    setErrorPopup({ show: false, title: '', message: '' });
-  };
+  const showErrorPopup = (title, message) => setErrorPopup({ show: true, title, message });
+  const closeErrorPopup = () => setErrorPopup({ show: false, title: '', message: '' });
 
   // Initialize Google Maps
   const initMap = () => {
@@ -75,64 +56,42 @@ const App = () => {
       zoom: 10,
       mapTypeId: 'hybrid',
       styles: [
-        {
-          featureType: "all",
-          elementType: "geometry",
-          stylers: [{ color: "#1e293b" }]
-        },
-        {
-          featureType: "all",
-          elementType: "labels.text.fill",
-          stylers: [{ color: "#ffffff" }]
-        },
-        {
-          featureType: "water",
-          elementType: "geometry",
-          stylers: [{ color: "#0f172a" }]
-        },
-        {
-          featureType: "landscape",
-          elementType: "geometry",
-          stylers: [{ color: "#334155" }]
-        },
-        {
-          featureType: "poi.park",
-          elementType: "geometry",
-          stylers: [{ color: "#10b981" }]
-        }
+        { featureType: "all", elementType: "geometry", stylers: [{ color: "#1e293b" }] },
+        { featureType: "all", elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#0f172a" }] },
+        { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#334155" }] },
+        { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#10b981" }] }
       ],
-      disableDefaultUI: false,
-      zoomControl: true,
-      mapTypeControl: true,
+      disableDefaultUI: false, // removes all default UI controls
+      zoomControl: true,      // remove zoom buttons
+      mapTypeControl: false,   // remove map type dropdown
       streetViewControl: false,
-      fullscreenControl: true
+      fullscreenControl: false,
+      scaleControl: true,
+      rotateControl: false,
+      keyboardShortcuts: false, // disables keyboard shortcuts
+      gestureHandling: 'greedy' // keeps map draggable
     });
 
     mapInstanceRef.current = map;
 
     map.addListener("click", (event) => {
-      if (event.latLng) {
-        handleMapClick(event.latLng);
-      }
+      if (event.latLng) handleMapClick(event.latLng);
     });
 
     setMapLoaded(true);
-    addNotification('info', 'Map Ready', 'Click anywhere on the map to analyze that location');
+    // addNotification('info', 'Map Ready', 'Click anywhere on the map to analyze that location');
   };
 
-  // Handle map click
+  // Handle map click (existing analysis logic)
   const handleMapClick = async (latLng) => {
     if (isLoading) return;
 
     const lat = latLng.lat();
     const lng = latLng.lng();
 
-    // Remove existing marker
-    if (markerRef.current) {
-      markerRef.current.setMap(null);
-    }
+    if (markerRef.current) markerRef.current.setMap(null);
 
-    // Add new marker
     markerRef.current = new window.google.maps.Marker({
       position: { lat, lng },
       map: mapInstanceRef.current,
@@ -147,16 +106,8 @@ const App = () => {
       }
     });
 
-    // Smooth zoom and pan to the clicked location
-    const targetZoom = 15; // Zoom level for detailed view
-    
-    // Animate to the new position
     mapInstanceRef.current.panTo({ lat, lng });
-    
-    // Smooth zoom transition
-    setTimeout(() => {
-      mapInstanceRef.current.setZoom(targetZoom);
-    }, 500); // Delay zoom slightly for smoother experience
+    setTimeout(() => mapInstanceRef.current.setZoom(17), 500);
 
     const loadingId = addNotification('loading', 'Analyzing Location', 'Getting weather data and plant recommendations...');
     setIsLoading(true);
@@ -170,12 +121,8 @@ const App = () => {
 
       if (geocodeResponse.results && geocodeResponse.results.length > 0) {
         for (const component of geocodeResponse.results[0].address_components) {
-          if (component.types.includes("locality")) {
-            city = component.long_name;
-          }
-          if (component.types.includes("country")) {
-            country = component.long_name;
-          }
+          if (component.types.includes("locality")) city = component.long_name;
+          if (component.types.includes("country")) country = component.long_name;
         }
       }
 
@@ -187,25 +134,15 @@ const App = () => {
       formData.append("city", city);
       formData.append("country", country);
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND}/analyze-location/`, {
-        method: "POST",
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await fetch(`${import.meta.env.VITE_BACKEND}/analyze-location/`, { method: "POST", body: formData });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const result = await response.json();
-
-      if (!result || result.status !== "success" || !result.final_report || !result.final_report.response) {
-        throw new Error("Invalid response format from server");
-      }
+      if (!result || result.status !== "success" || !result.final_report?.response) throw new Error("Invalid response format");
 
       const responseData = result.final_report.response;
-
       if (!responseData.weather_data || !responseData.land_coverage || !responseData.season || !responseData.location || !responseData.recommendations) {
-        throw new Error("Missing required data in response");
+        throw new Error("Missing required data");
       }
 
       setStaticMapImagePath(result.file_path || null);
@@ -213,69 +150,57 @@ const App = () => {
 
       removeNotification(loadingId);
       addNotification('success', 'Analysis Complete', `Found data for ${city}, ${country}. Opening dashboard...`);
-
-      setTimeout(() => {
-        setCurrentView('dashboard');
-      }, 1500);
+      setTimeout(() => setCurrentView('dashboard'), 1500);
 
     } catch (error) {
       console.error("Error analyzing location:", error);
       removeNotification(loadingId);
-
-      let errorTitle = "Analysis Failed";
-      let errorMessage = "Could not analyze this location. Please try another area.";
-
-      if (error.message.includes("HTTP error")) {
-        errorTitle = "Server Error";
-        errorMessage = "The analysis server is not responding. Please check if the backend service is running.";
-      }
-
-      showErrorPopup(errorTitle, errorMessage);
-      addNotification('error', errorTitle, errorMessage);
+      showErrorPopup("Analysis Failed", "Could not analyze this location. Please try another area.");
+      addNotification('error', "Analysis Failed", "Could not analyze this location. Please try another area.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Search Bar functionality
+  const handleSearch = () => {
+    if (!searchQuery.trim() || !mapInstanceRef.current) return;
+
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: searchQuery }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const location = results[0].geometry.location;
+        mapInstanceRef.current.panTo(location);
+        mapInstanceRef.current.setZoom(18); // optional zoom
+      } else {
+        alert("Location not found!");
+      }
+    });
+  };
+
+
   // Load Google Maps API
   useEffect(() => {
-    if (window.google) {
-      initMap();
-      return;
-    }
+    if (window.google) { initMap(); return; }
 
     const script = document.createElement('script');
-    const API_KEY = import.meta.env.VITE_API_KEY;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initGoogleMaps`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_API_KEY}&libraries=places&callback=initGoogleMaps`;
     script.async = true;
     script.defer = true;
-    
     window.initGoogleMaps = initMap;
-    
-    script.onerror = () => {
-      addNotification('error', 'Map Loading Error', 'Failed to load Google Maps API. Please check your API key.');
-    };
-    
+    script.onerror = () => addNotification('error', 'Map Loading Error', 'Failed to load Google Maps API.');
     document.head.appendChild(script);
 
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
+    return () => { if (script.parentNode) script.parentNode.removeChild(script); };
   }, []);
 
-  // Effect to handle map resize when view changes
+  // Map resize on view change
   useEffect(() => {
     if (currentView === 'map' && mapInstanceRef.current && window.google) {
-      const timer = setTimeout(() => {
-        window.google.maps.event.trigger(mapInstanceRef.current, 'resize');
-      }, 200);
-      
+      const timer = setTimeout(() => window.google.maps.event.trigger(mapInstanceRef.current, 'resize'), 200);
       return () => clearTimeout(timer);
     }
   }, [currentView]);
-
   const NotificationIcon = ({ type }) => {
     switch (type) {
       case 'loading':
@@ -319,6 +244,7 @@ const App = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(132,204,22,0.05)_0%,transparent_50%)]" />
       </div>
 
+
       {/* Error Popup */}
       {errorPopup.show && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -349,12 +275,11 @@ const App = () => {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className={`bg-white/5 backdrop-blur-xl border rounded-xl p-4 min-w-80 flex items-start gap-3 transform transition-all duration-500 ${
-              notification.type === 'success' ? 'border-green-500/50 bg-green-500/10' :
+            className={`bg-white/5 backdrop-blur-xl border rounded-xl p-4 min-w-80 flex items-start gap-3 transform transition-all duration-500 ${notification.type === 'success' ? 'border-green-500/50 bg-green-500/10' :
               notification.type === 'error' ? 'border-red-500/50 bg-red-500/10' :
-              notification.type === 'info' ? 'border-blue-500/50 bg-blue-500/10' :
-              'border-amber-500/50 bg-amber-500/10'
-            }`}
+                notification.type === 'info' ? 'border-blue-500/50 bg-blue-500/10' :
+                  'border-amber-500/50 bg-amber-500/10'
+              }`}
           >
             <NotificationIcon type={notification.type} />
             <div className="flex-1">
@@ -373,37 +298,50 @@ const App = () => {
         ))}
       </div>
 
-      {/* Map View */}
-      {currentView === 'map' && (
-        <div className="absolute inset-0 transition-all duration-1000 ease-in-out">
-          <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-slate-900/90 to-transparent p-6 text-center">
-            <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-green-500 via-green-400 to-green-300 bg-clip-text text-transparent">
-              🌱 Green Dashboard
-            </h1>
-            <p className="text-slate-300 text-lg">Click anywhere on the map to analyze plant conditions</p>
-          </div>
+     {/* Map View */}
+{currentView === 'map' && (
+  <div className="absolute inset-0 transition-all duration-1000 ease-in-out">
+    {/* Header + Search Bar */}
+    <div className="absolute top-0 left-0 right-0 z-10 p-6 px-16 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-b from-slate-900/98 to-slate-900/12
+">
+      {/* Title */}
+      <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-green-500 via-green-400 to-green-300 bg-clip-text text-transparent">
+        🌱 Krishi Sahayak
+      </h1>
 
-          <div ref={mapRef} className="w-full h-full" />
+      {/* Search Bar */}
+      <div className="flex gap-2 w-full sm:w-auto">
+        <input
+          type="text"
+          placeholder="Search location..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          className="flex-1 px-4 py-2 rounded-l-lg border border-white/20 bg-white/10 text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+        <button
+          onClick={handleSearch}
+          className="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-r-lg font-semibold"
+        >
+          Search
+        </button>
+      </div>
+    </div>
 
-          {!mapLoaded && (
-            <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center flex-col gap-4">
-              <div className="w-12 h-12 border-3 border-green-500/30 border-t-green-500 rounded-full animate-spin" />
-              <p className="text-xl text-white">Loading Map...</p>
-              <p className="text-sm text-slate-300">Preparing your plant analysis tool</p>
-            </div>
-          )}
+    {/* Map */}
+    <div ref={mapRef} className="w-full h-full" />
 
-          {mapLoaded && (
-            <div className="absolute bottom-6 left-6 right-6 bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl p-4 flex items-center gap-3">
-              <div className="text-green-500 text-2xl">📍</div>
-              <div>
-                <h3 className="font-semibold mb-1">Ready to Analyze</h3>
-                <p className="text-sm text-slate-300">Click on any location to get weather data and plant recommendations</p>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+    {/* Loading */}
+    {!mapLoaded && (
+      <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center flex-col gap-4">
+        <div className="w-12 h-12 border-3 border-green-500/30 border-t-green-500 rounded-full animate-spin" />
+        <p className="text-xl text-white">Loading Map...</p>
+        <p className="text-sm text-slate-300">Preparing your plant analysis tool</p>
+      </div>
+    )}
+  </div>
+)}
+
 
       {/* Dashboard View */}
       {currentView === 'dashboard' && dashboardData && selectedLocation && (
@@ -419,7 +357,7 @@ const App = () => {
                   ← Back to Map
                 </button>
                 <h1 className="text-5xl font-bold bg-gradient-to-r from-green-500 via-green-400 to-green-300 bg-clip-text text-transparent">
-                  🌱 Green Dashboard
+                  🌱 Krishi Sahayak
                 </h1>
               </div>
               <p className="text-slate-300 text-lg">
@@ -432,7 +370,7 @@ const App = () => {
               {/* Combined Weather & Season Card */}
               <div className="lg:col-span-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 via-green-400 to-green-300" />
-                
+
                 {/* Weather Section */}
                 <div className="mb-6 pb-6 border-b border-white/10">
                   <div className="flex items-center gap-2 mb-4 text-lg font-semibold bg-gradient-to-r from-green-500 to-green-400 bg-clip-text text-transparent">
@@ -475,11 +413,10 @@ const App = () => {
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-center">
-                      <div className={`inline-block px-4 py-2 rounded-full font-semibold border ${
-                        dashboardData.season.is_growing_season 
-                          ? 'bg-green-500/20 border-green-500/50 text-green-400' 
-                          : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
-                      }`}>
+                      <div className={`inline-block px-4 py-2 rounded-full font-semibold border ${dashboardData.season.is_growing_season
+                        ? 'bg-green-500/20 border-green-500/50 text-green-400'
+                        : 'bg-amber-500/20 border-amber-500/50 text-amber-400'
+                        }`}>
                         Growing Season: {dashboardData.season.is_growing_season ? 'Yes' : 'No'}
                       </div>
                     </div>
@@ -505,7 +442,7 @@ const App = () => {
               {/* Location & Land Coverage Card */}
               <div className="lg:col-span-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 via-green-400 to-green-300" />
-                
+
                 <div className="mb-6 pb-6 border-b border-white/10">
                   <div className="flex items-center gap-2 mb-4 text-lg font-semibold bg-gradient-to-r from-green-500 to-green-400 bg-clip-text text-transparent">
                     📍 Location
