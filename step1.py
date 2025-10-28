@@ -60,7 +60,7 @@ def extract_json_from_caption(caption):
     except Exception as e:
         raise RuntimeError(f"Error extracting JSON: {e}")
 
-def generate_coverage_details(image_path="files/static_map.png", latitude=None, longitude=None):
+def generate_coverage_details(image_path="files\static_map_26.855718_81.049759.png", latitude=None, longitude=None):
     prompt = """From this image, estimate the land coverage percentages and return the result in valid JSON format. The JSON must match the following schema:
 {
   "vegetation_coverage": float,

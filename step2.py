@@ -8,6 +8,7 @@ from langchain_core.output_parsers import BaseOutputParser
 import google.generativeai as genai
 from dotenv import load_dotenv
 from datetime import datetime
+import step3
 
 # Load environment variables from .env file
 load_dotenv()
